@@ -23,6 +23,8 @@
 #include <utility>
 #include <vector>
 
+#include "example_interfaces/msg/empty.hpp"
+
 #include "rclcpp/node.hpp"
 #include "rclcpp/qos.hpp"
 
@@ -124,6 +126,7 @@ private:
   std::unordered_map<std::string, rclcpp::QoS> topic_qos_profile_overrides_;
   std::unordered_set<std::string> topic_unknown_types_;
   rclcpp::Service<rosbag2_interfaces::srv::Snapshot>::SharedPtr srv_snapshot_;
+  rclcpp::Publisher<example_interfaces::msg::Empty>::SharedPtr event_pub_;
 };
 
 }  // namespace rosbag2_transport
