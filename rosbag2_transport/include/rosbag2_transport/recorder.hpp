@@ -126,7 +126,18 @@ private:
   std::unordered_map<std::string, rclcpp::QoS> topic_qos_profile_overrides_;
   std::unordered_set<std::string> topic_unknown_types_;
   rclcpp::Service<rosbag2_interfaces::srv::Snapshot>::SharedPtr srv_snapshot_;
+
+  // Variables for event publishing
   rclcpp::Publisher<rosbag2_interfaces::msg::WriteSplitEvent>::SharedPtr split_event_pub_;
+  bool event_publisher_thread_should_exit_ = false;
+  bool write_split_has_occurred_ = false;
+  rosbag2_cpp::bag_events::BagSplitInfo bag_split_info_;
+  std::mutex event_publisher_thread_mutex_;
+  std::condition_variable event_publisher_thread_wake_cv_;
+  std::unique_ptr<std::thread> event_publisher_thread_;
+
+  void event_publisher_thread_main();
+  bool event_publisher_thread_should_wake();
 };
 
 }  // namespace rosbag2_transport
