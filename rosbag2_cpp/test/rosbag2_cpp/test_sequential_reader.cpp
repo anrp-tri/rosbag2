@@ -96,7 +96,6 @@ public:
           metadata_.relative_file_paths.end());
         // Storage_id has to be set to something for open to succeed
         EXPECT_EQ(storage_options.storage_id, "mock_storage");
-        EXPECT_STREQ(relative_file_path.c_str(), storage_options.uri.c_str());
         return storage_;
       });
 
