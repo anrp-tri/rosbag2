@@ -196,7 +196,7 @@ public:
 private:
   std::mutex callback_list_mutex_;
   std::vector<PlayerClock::JumpHandler::SharedPtr> callback_list_
-    RCPPUTILS_TSA_GUARDED_BY(callback_list_mutex_);
+  RCPPUTILS_TSA_GUARDED_BY(callback_list_mutex_);
 
   void process_callbacks_before_jump(const rcl_time_jump_t & time_jump)
   {
