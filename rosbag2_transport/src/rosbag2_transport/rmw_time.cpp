@@ -41,7 +41,10 @@ rmw_time_t
 rmw_time_from_nsec(const rmw_duration_t nanoseconds)
 {
   if (nanoseconds < 0) {
-    return (rmw_time_t)RMW_DURATION_INFINITE;
+    // rosbag2\rosbag2_transport\src\rosbag2_transport\rmw_time.cpp(44,24):
+    // error C4576: a parenthesized type followed by an initializer list
+    // is a non-standard explicit type conversion syntax
+    return rmw_time_t RMW_DURATION_INFINITE;
   }
 
   // Avoid typing the 1 billion constant

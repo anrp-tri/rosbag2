@@ -25,6 +25,8 @@
 namespace rosbag2_transport
 {
 
+GenericSubscription::~GenericSubscription() = default;
+
 std::shared_ptr<void> GenericSubscription::create_message()
 {
   return create_serialized_message();

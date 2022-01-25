@@ -17,12 +17,15 @@
 
 #include "rclcpp/qos.hpp"
 
+#include "rcpputils/shared_library.hpp"
+
 namespace rosbag2_transport
 {
 
 class ClockQoS : public rclcpp::QoS
 {
 public:
+  RCLCPP_PUBLIC
   explicit
   ClockQoS(
     const rclcpp::QoSInitialization & qos_initialization = rclcpp::KeepLast(1));

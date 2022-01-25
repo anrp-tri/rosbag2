@@ -117,7 +117,7 @@ public:
   }
 
   RCLCPP_PUBLIC
-  virtual ~GenericSubscription() = default;
+  virtual ~GenericSubscription();
 
   // Same as create_serialized_message() as the subscription is to serialized_messages only
   RCLCPP_PUBLIC

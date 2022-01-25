@@ -21,6 +21,8 @@
 #ifndef _WIN32
 #include <dirent.h>
 #include <unistd.h>
+#else
+#include <Windows.h>
 #endif
 
 #ifdef __cplusplus

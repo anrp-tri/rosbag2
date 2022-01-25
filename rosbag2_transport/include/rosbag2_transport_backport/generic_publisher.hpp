@@ -111,7 +111,7 @@ public:
   }
 
   RCLCPP_PUBLIC
-  virtual ~GenericPublisher() = default;
+  virtual ~GenericPublisher();
 
   /// Publish a rclcpp::SerializedMessage.
   RCLCPP_PUBLIC

@@ -21,6 +21,8 @@
 namespace rosbag2_transport
 {
 
+GenericPublisher::~GenericPublisher() = default;
+
 void GenericPublisher::publish(const rclcpp::SerializedMessage & message)
 {
   auto return_code = rcl_publish_serialized_message(

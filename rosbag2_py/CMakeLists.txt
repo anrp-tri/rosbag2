@@ -32,7 +32,18 @@ if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE_DEBUG}")
 endif()
 
+if(WIN32)
+  set(SAVED_PYTHON_INCLUDE_DIRS "${PYTHON_INCLUDE_DIRS}")
+  set(SAVED_PYTHON_INCLUDE_DIR "${PYTHON_INCLUDE_DIR}")
+endif()
+
 find_package(pybind11 REQUIRED)
+
+if(WIN32)
+  message(STATUS "Restoring Python include dirs ${SAVED_PYTHON_INCLUDE_DIRS} ${SAVED_PYTHON_INCLUDE_DIR}")
+  set(PYTHON_INCLUDE_DIRS "${SAVED_PYTHON_INCLUDE_DIRS}")
+  set(PYTHON_INCLUDE_DIR "${SAVED_PYTHON_INCLUDE_DIR}")
+endif()
 
 if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
   # pybind11 logic for setting up a debug build when both a debug and release

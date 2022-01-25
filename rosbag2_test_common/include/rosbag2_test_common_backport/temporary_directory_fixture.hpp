@@ -33,12 +33,23 @@ public:
   {
     std::string full_template_str =
       (rcpputils::fs::temp_directory_path() / "tmp_test_dir_XXXXXX").string();
+#ifdef _WIN32
+    const char * dir_name = _mktemp(&full_template_str[0]);
+#else
     const char * dir_name = mkdtemp(&full_template_str[0]);
+#endif
     if (dir_name == nullptr) {
       std::error_code ec{errno, std::system_category()};
       errno = 0;
       throw std::system_error(ec, "could not format or create the temp directory");
     }
+#ifdef _WIN32
+    if (_mkdir(dir_name) != 0) {
+      std::error_code ec{errno, std::system_category()};
+      errno = 0;
+      throw std::system_error(ec, "could not create the temp directory");
+    }
+#endif
     temporary_dir_path_ = dir_name;
   }
 
