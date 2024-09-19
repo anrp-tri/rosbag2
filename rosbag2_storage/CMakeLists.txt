@@ -38,6 +38,13 @@ target_include_directories(${PROJECT_NAME}
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
+if (NOT WIN32)
+target_link_libraries(${PROJECT_NAME}
+  unwind
+  dw
+  dl
+)
+endif()
 ament_target_dependencies(
   ${PROJECT_NAME}
   pluginlib

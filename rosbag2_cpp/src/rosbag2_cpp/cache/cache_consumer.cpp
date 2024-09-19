@@ -41,6 +41,10 @@ void CacheConsumer::close()
   message_cache_->finalize();
   is_stop_issued_ = true;
 
+  try {
+    throw std::runtime_error("dummy");
+  } catch (const std::runtime_error&) {}
+
   ROSBAG2_CPP_LOG_INFO_STREAM(
     "Writing remaining messages from cache to the bag. It may take a while");
 
