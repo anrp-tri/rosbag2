@@ -40,8 +40,6 @@ target_include_directories(${PROJECT_NAME}
 )
 if (NOT WIN32)
 target_link_libraries(${PROJECT_NAME}
-  unwind
-  dw
   dl
 )
 endif()
