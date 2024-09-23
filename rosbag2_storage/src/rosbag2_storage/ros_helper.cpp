@@ -63,6 +63,9 @@ make_empty_serialized_message(size_t size)
 
 }  // namespace rosbag2_storage
 
+#ifdef __GNUC__
+#include "boost/asio.hpp"
+
 // https://stackoverflow.com/questions/11665829/how-can-i-print-stack-trace-for-caught-exceptions-in-c-code-injection-in-c
 #include <iostream>
 #include <dlfcn.h>
@@ -74,24 +77,54 @@ make_empty_serialized_message(size_t size)
 #include <cstdlib>
 #include <unistd.h>
 
+namespace {
+struct Dumper {
+  Dumper() {
+  }
+
+  ~Dumper() {
+    ios_.run();
+  }
+
+  boost::asio::io_service ios_;
+
+  static Dumper instance_;
+};
+
+Dumper Dumper::instance_;
+}  // namespace
+
+
 extern "C" {
   void __cxa_throw(void *ex, void *info, void (*dest)(void *)) {
-    void *last_frames[20];
+    void *last_frames[64];
     size_t last_size;
 
     const char* name = reinterpret_cast<const std::type_info*>(info)->name();
+    
+    std::ostringstream oss;
     if (name) {
-      write(2, name, strlen(name));
-      write(2, " (typeinfo)\n", 12);
+      oss << "Exception type: " << name << "\n";
     } else {
-      write(2, "no type info\n", 13);
+      oss << "No exception type\n";
     }
 
     last_size = backtrace(last_frames, sizeof last_frames/sizeof(void*));
+    char** symbols = backtrace_symbols(last_frames, last_size);
 
-    backtrace_symbols_fd(last_frames, last_size, STDERR_FILENO);
+    for (size_t i = 0; i < last_size; i++) {
+      oss << "[" << i << "] " << symbols[i] << "\n";
+    }
+
+    free(symbols);
+
+    Dumper::instance_.ios_.post([str(oss.str())] {
+      std::cerr << str;
+    });
 
     static void (*const rethrow)(void*,void*,void(*)(void*)) __attribute__ ((noreturn)) = (void (*)(void*,void*,void(*)(void*)))dlsym(RTLD_NEXT, "__cxa_throw");
     rethrow(ex,info,dest);
   }
 }
+
+#endif
